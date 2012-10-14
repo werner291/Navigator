@@ -69,7 +69,7 @@ public class RoadMap {
 	}
 	
 	void loadFromFile(File file) throws IOException{
-		//Initialise reader
+		//Initialize reader
 	    final BufferedReader in = new BufferedReader(new FileReader(file));
 		String str;
 		//Read entire file loading in the map nodes
@@ -97,7 +97,7 @@ public class RoadMap {
 				}
 	    	} else if (Words[0].equals("Dest")){
 	    		MapDest newDest = new MapDest(Integer.parseInt(Words[2]), Integer.parseInt(Words[3]),
-	    				getNearestNode(Integer.parseInt(Words[2]), Integer.parseInt(Words[3])), Words[1]);
+	    				getNearestNode(Integer.parseInt(Words[2]), Integer.parseInt(Words[3])), Words[1].toLowerCase());
 	    		destinations.add(newDest);
 	    	}
     	}
@@ -154,6 +154,17 @@ public class RoadMap {
 			MapDest iDest = destinations.get(i);
 			if (iDest.name.equalsIgnoreCase(name)) return iDest;
 			else if (iDest.name.toLowerCase().contains(name.toLowerCase())) partialMatch.add(iDest);
+		}
+		
+		return null;
+	}
+	
+	public MapDest getDestinationExact(String name) {
+		ArrayList<MapDest> partialMatch = new ArrayList<MapDest>();
+		
+		for (int i=0;i<destinations.size();i++){
+			MapDest iDest = destinations.get(i);
+			if (iDest.name.equalsIgnoreCase(name)) return iDest;
 		}
 		
 		return null;
@@ -239,18 +250,21 @@ public class RoadMap {
 	}
 
 	public void AddNode(int x, int z) {
-		// TODO make unique ID
 		nodes.add(new MapNode(x,z,IdManager.createId()));
 	}
 
 	public void AddRoad(MapNode nodeA, MapNode nodeB) {
-		//TODO unique ID.
 		addRoad(new MapRoad(nodeA, nodeB, IdManager.createId()));
 	}
 
-	public void AddDest(int x, int z, String name) {
-		MapDest newDest = new MapDest(x,z,getNearestNode(x,z), name);
-		destinations.add(newDest);
+	public boolean AddDest(int x, int z, String name) {
+		name = name.toLowerCase();
+		
+		if (getDestinationExact(name)==null){
+			destinations.add(new MapDest(x,z,getNearestNode(x,z), name));
+			return true;
+		}
+		else return false;
 	}
 
 	// Get all nodes that are maximally dist from (x,z).

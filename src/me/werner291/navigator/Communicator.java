@@ -165,6 +165,20 @@ public class Communicator {
 		player.sendMessage("Far!");
 		for (int i=0;i<lines.length;i++) player.sendMessage("[Navigator] "+lines[i]);
 	}
+
+	public static void tellDestionationExists(Player player, String destname) {
+		String message1 = messages.get("DestinationExists");
+		
+		if (message1 == null) {
+			System.out.println("[Navigator] WARNING! NavStart missing from language file.");
+			return;
+		}
+		
+		message1 = message1.replaceAll("DESTNAME",destname );
+		String[] lines = message1.split("/nl");
+		
+		for (int i=0;i<lines.length;i++) player.sendMessage("[Navigator] "+lines[i]);
+	}
 	
 	
 }

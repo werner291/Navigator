@@ -463,7 +463,9 @@ public class Navigator extends JavaPlugin implements Listener{
 					// Check if map is available.
 					if (rdmap == null) {Communicator.tellNoMap(player, player.getWorld().getName()); return true;}
 					
-					rdmap.AddDest(player.getLocation().getBlockX(),player.getLocation().getBlockZ(),args[2]);
+					if (!rdmap.AddDest(player.getLocation().getBlockX(),player.getLocation().getBlockZ(),args[2])){
+						Communicator.tellDestionationExists(player,args[2]);
+					}
 					
 					player.sendMessage("[Navigator] Destination created: "+args[2]);
 					
