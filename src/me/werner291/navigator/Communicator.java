@@ -66,6 +66,8 @@ public class Communicator {
 		messages.put("InGameOnlyCommand",languageConfig.getString("InGameOnlyCommand"));
 		messages.put("RouteCalc",languageConfig.getString("RouteCalc"));
 		messages.put("DestCoordsFarFromRoad",languageConfig.getString("DestCoordsFarFromRoad"));
+		
+		messages.put("DestinationExists",languageConfig.getString("DestinationExists"));
 	}
 
 	public static void sendOffRouteWarningA(Player player) {
@@ -170,7 +172,7 @@ public class Communicator {
 		String message1 = messages.get("DestinationExists");
 		
 		if (message1 == null) {
-			System.out.println("[Navigator] WARNING! NavStart missing from language file.");
+			System.out.println("[Navigator] WARNING! DestinationExists missing from language file.");
 			return;
 		}
 		
