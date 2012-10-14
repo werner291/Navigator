@@ -1,0 +1,18 @@
+name: Navigator
+main: me.werner291.navigator.Navigator
+version: 1.5
+commands:
+  Navigator:
+    description: Navigator master command
+  Nav:
+    description: Alternative master command
+permissions:
+  navigator.reload:
+    description: Allows to reload the plugin
+    default: op
+  navigator.use:
+    description: Allows usage of the plugin
+    default: true
+  navigator.edit:
+    description: Allows map editing.
+    default: op
