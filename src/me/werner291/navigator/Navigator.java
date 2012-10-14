@@ -126,7 +126,7 @@ public class Navigator extends JavaPlugin implements Listener{
 					return false;
 				}
 				
-				MapDest destination = maps.get(loc.getWorld()).getDestination(args[1]);
+				MapDest destination = maps.get(loc.getWorld()).searchDestination(args[1]);
 				
 				if (destination == null){
 					Communicator.tellMessage(player,"DestNotFound");
@@ -477,7 +477,7 @@ public class Navigator extends JavaPlugin implements Listener{
 					// Check if map is available.
 					if (rdmap == null) {Communicator.tellNoMap(player, player.getWorld().getName()); return true;}
 					
-					MapDest dest = rdmap.getDestination(args[2]);
+					MapDest dest = rdmap.searchDestination(args[2]);
 					
 					if (dest == null) {player.sendMessage("[Navigator] Destination \""+args[2]+"\" not found."); return true;}
 					

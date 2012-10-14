@@ -147,7 +147,7 @@ public class RoadMap {
 		return closest;
 	}
 
-	public MapDest getDestination(String name) {
+	public MapDest searchDestination(String name) {
 		ArrayList<MapDest> partialMatch = new ArrayList<MapDest>();
 		
 		for (int i=0;i<destinations.size();i++){
@@ -160,7 +160,6 @@ public class RoadMap {
 	}
 	
 	public MapDest getDestinationExact(String name) {
-		ArrayList<MapDest> partialMatch = new ArrayList<MapDest>();
 		
 		for (int i=0;i<destinations.size();i++){
 			MapDest iDest = destinations.get(i);
