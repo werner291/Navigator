@@ -1,6 +1,5 @@
 package me.werner291.navigator;
 
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 import me.werner291.navigator.vecmath.VecMath2D;
@@ -8,19 +7,24 @@ import me.werner291.navigator.vecmath.VecMath2D;
 public class MapRoad {
 	
 	MapNode node1; MapNode node2; int id;
-	Line2D geoLine;
+	
+	int x1,y1,z1,x2,y2,z2;
 	
 	public MapRoad(MapNode node1, MapNode node2, int id) {
 		this.node1 = node1; this.node2 = node2;
-		geoLine = new Line2D.Double(node1.x, node1.z, node2.x, node2.z);
+		x1 = node1.x; y1 = node1.y; z1 = node1.z;
+		x2 = node2.x; y2 = node2.y; z2 = node2.z;
 		this.id = id;
 	}
 
 	public String getWriteString() {
 		return "Road "+id+" "+node1.id+" "+node2.id;
 	}
-
-	public Point2D getClosestPoint(int x, int z) {
-		return VecMath2D.getClosestPointOnSegment(new Point2D.Double(node1.x,node1.z), new Point2D.Double(node2.x,node2.z), new Point2D.Double(x,z));
+	
+	/**
+	 * @return A double array with 3 doubles representing a 3d point {x,y,z}
+	 */
+	public double[] getClosestPoint(int x, int y, int z) {
+		return VecMath2D.getClosestPointOnSegment(node1.x,node1.y,node1.z, node2.x,node2.y,node2.z, x, y, z);
 	}
 }

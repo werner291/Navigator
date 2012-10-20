@@ -29,29 +29,36 @@ public class EditorSession {
 	public MapRoad selRoad;
 	
 	
-	public void drawMap(int height) {
+	public void drawMap() {
 		eraseDrawnMap();
 		draw_map = true;
 		draw_map_height = height;
 		List<MapNode> toDraw = rdmap.getNodesAround(owner.getLocation().getBlockX(),owner.getLocation().getBlockZ(),100);
 		for (int i=0;i<toDraw.size();i++){
-			DrawGhostBlock(toDraw.get(i).x,draw_map_height+1,toDraw.get(i).z,Material.GLOWSTONE);
-			DrawGhostBlock(toDraw.get(i).x,draw_map_height,toDraw.get(i).z,Material.GLOWSTONE);
-			DrawGhostBlock(toDraw.get(i).x,draw_map_height-1,toDraw.get(i).z,Material.GLOWSTONE);
+			DrawGhostBlock(toDraw.get(i).x,toDraw.get(i).y+2,toDraw.get(i).z,Material.GLOWSTONE);
+			
+			DrawGhostBlock(toDraw.get(i).x,toDraw.get(i).y+3,toDraw.get(i).z,Material.GLOWSTONE);
+			DrawGhostBlock(toDraw.get(i).x-1,toDraw.get(i).y+3,toDraw.get(i).z,Material.GLOWSTONE);
+			DrawGhostBlock(toDraw.get(i).x+1,toDraw.get(i).y+3,toDraw.get(i).z,Material.GLOWSTONE);
+			DrawGhostBlock(toDraw.get(i).x,toDraw.get(i).y+3,toDraw.get(i).z-1,Material.GLOWSTONE);
+			DrawGhostBlock(toDraw.get(i).x,toDraw.get(i).y+3,toDraw.get(i).z+1,Material.GLOWSTONE);
+			
+			DrawGhostBlock(toDraw.get(i).x,toDraw.get(i).y+4,toDraw.get(i).z,Material.GLOWSTONE);
 		}
+		
 		List<MapRoad> roadsToDraw = rdmap.getRoadsAround(owner.getLocation().getBlockX(),owner.getLocation().getBlockZ(),100);
 		for (int i=0;i<roadsToDraw.size();i++){
 			DrawGhostBlock((int)(roadsToDraw.get(i).geoLine.getX1()*0.25+roadsToDraw.get(i).geoLine.getX2()*0.75),
-						   draw_map_height,
 						   (int)(roadsToDraw.get(i).geoLine.getY1()*0.25+roadsToDraw.get(i).geoLine.getY2()*0.75),
+						   (int)(roadsToDraw.get(i).geoLine.getZ1()*0.25+roadsToDraw.get(i).geoLine.getZ2()*0.75),
 						   Material.BRICK);
-			DrawGhostBlock((int)(roadsToDraw.get(i).geoLine.getX1()*0.5+roadsToDraw.get(i).geoLine.getX2()*0.5),
-					   draw_map_height,
-					   (int)(roadsToDraw.get(i).geoLine.getY1()*0.5+roadsToDraw.get(i).geoLine.getY2()*0.5),
+			DrawGhostBlock((int)(roadsToDraw.get(i).geoLine.getX1()*0.50),
+					   (int)(roadsToDraw.get(i).geoLine.getY1()*0.50),
+					   (int)(roadsToDraw.get(i).geoLine.getZ1()*0.50),
 					   Material.BRICK);
 			DrawGhostBlock((int)(roadsToDraw.get(i).geoLine.getX1()*0.75+roadsToDraw.get(i).geoLine.getX2()*0.25),
-					   draw_map_height,
 					   (int)(roadsToDraw.get(i).geoLine.getY1()*0.75+roadsToDraw.get(i).geoLine.getY2()*0.25),
+					   (int)(roadsToDraw.get(i).geoLine.getZ1()*0.75+roadsToDraw.get(i).geoLine.getZ2()*0.25),
 					   Material.BRICK);
 		}
 		List<MapDest> destsToDraw = rdmap.getDestinationsAround(owner.getLocation().getBlockX(),owner.getLocation().getBlockZ(),100);

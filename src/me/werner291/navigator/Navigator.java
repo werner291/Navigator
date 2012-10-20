@@ -43,7 +43,7 @@ public class Navigator extends JavaPlugin implements Listener{
 
 	@Override
 	public void onEnable() {
-		log.info("Navigator V1.5.1 enabled!");
+		log.info("Navigator V1.6 DEV enabled!");
 		getConfig();
 		log.info("[Navigator] Configuration loaded.");
 		

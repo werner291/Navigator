@@ -41,6 +41,8 @@ public class Communicator {
 		
 		FileConfiguration languageConfig = YamlConfiguration.loadConfiguration(languageFile);
 		 
+		//TODO Make less ridiculously unelegant
+		
 		cardinalStrings.put(Cardinal.NORTH, languageConfig.getString("North"));
 		cardinalStrings.put(Cardinal.EAST, languageConfig.getString("East"));
 		cardinalStrings.put(Cardinal.WEST, languageConfig.getString("West"));

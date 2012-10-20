@@ -201,6 +201,11 @@ public class RoadMap {
 		else file = saveFile;
 		
 		BufferedWriter out = new BufferedWriter(new FileWriter(saveFile, false));
+		
+		out.write("SAVEFORMAT 2");
+		out.newLine();
+		out.flush();
+		
 		for (int i=0;i<nodes.size();i++){
 			String writeString = null;
 			
