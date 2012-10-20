@@ -42,8 +42,6 @@ public class RoutePlanner {
 	
 	public String findRoute(){
 		
-		//TODO make async
-		
 		//Start the process by looking at all available directions from the starting point.
 		//And closing the starting point.
 		
@@ -63,7 +61,7 @@ public class RoutePlanner {
 		
 		PlannerNode lastNode = null;
 		
-		// Apply an a*-like algorith to find the shortest route.
+		// Apply an a*-like algorithm to find the shortest route.
 		
 		while (working){
 			// Get, from the open nodes, the most potential one.

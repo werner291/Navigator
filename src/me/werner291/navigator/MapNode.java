@@ -37,4 +37,8 @@ public class MapNode {
 	public int getManhattanDistance(int x2, int y2, int z2) {
 		return Math.abs(x-x2)+Math.abs(y-y2)+Math.abs(z-z2);
 	}
+
+	public void setCoordinates(int x, int y, int z) {
+		this.x = x; this.y = y; this.z = z;
+	}
 }

@@ -1,5 +1,7 @@
 package me.werner291.navigator.vecmath;
 
+import java.util.Arrays;
+
 /*
  * DistancePointSegmentExample, calculate distance to line
  * Copyright (C) 2008 Pieter Iserbyt <pieter.iserbyt@gmail.com>
@@ -41,6 +43,10 @@ public class VecMath2D {
     public static double distanceToSegment(double x1, double y1, double z1,
     		double x2, double y2, double z2, double x3, double y3, double z3) {
 		double[] closestPoint = getClosestPointOnSegment(x1,y1,z1,x2,y2,z2,x3,y3,z3);
+		
+		System.out.println("[Nav Debug] Reference point: " + x3+"|"+y3+"|"+z3 );
+		System.out.println("[Nav Debug] Closest point: " + Arrays.toString(closestPoint));
+		
 		double deltaX = x3 - closestPoint[0];
 		double deltaY = y3 - closestPoint[1];
 		double deltaZ = z3 - closestPoint[2];

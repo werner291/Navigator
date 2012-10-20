@@ -132,9 +132,19 @@ public class Navigator extends JavaPlugin implements Listener{
 					Communicator.tellMessage(player,"DestNotFound");
 					return false;
 				}
+				
+				double distanceFromRoad;
+				if (!maps.get(loc.getWorld()).oldCompatibilityMode)
+					distanceFromRoad = maps.get(loc.getWorld()).getNearestRoad(loc.getBlockX(), loc.getBlockY(),loc.getBlockZ())
+						.distanceFromPoint(loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
+				else
+					distanceFromRoad = maps.get(loc.getWorld()).getNearestRoad(loc.getBlockX(), 80,loc.getBlockZ())
+						.distanceFromPoint(loc.getBlockX(),80,loc.getBlockZ());
+				
+				sender.sendMessage("[Nav Debug] Distance: "+distanceFromRoad);
+				
 				// Check distance from closest road
-				if (maps.get(loc.getWorld()).getNearestRoad(loc.getBlockX(), loc.getBlockY(),loc.getBlockZ())
-						.distanceFromPoint(loc.getBlockX(),loc.getBlockY(),loc.getBlockZ())>10){
+				if (distanceFromRoad>10){
 					Communicator.tellMessage(player,"TooFarFromRoad");
 					return true;
 				}
@@ -429,6 +439,27 @@ public class Navigator extends JavaPlugin implements Listener{
 					player.sendMessage("[Navigator] Node B selected at x:" +editor_sessions.get(player).nodeB.x+" y:"+editor_sessions.get(player).nodeB.y+" z:"+editor_sessions.get(player).nodeB.z);
 					if (editor_sessions.get(player).nodeA == editor_sessions.get(player).nodeB)
 						player.sendMessage("[Navigator] Warning: Selected the same node twice.");
+				}
+				// Move node
+				if (args[1].equalsIgnoreCase("moveNode")){
+					MapNode node = null;
+					// Check if map is available.
+					if (maps.get(player.getWorld()) == null){
+						Communicator.tellNoMap(player, player.getWorld().getName());
+						return true;
+					}
+					
+					if (args[2].equalsIgnoreCase("A")) node = editor_sessions.get(player).nodeA;
+					else if (args[2].equalsIgnoreCase("B")) node = editor_sessions.get(player).nodeB;
+					else player.sendMessage("[Navigator] /nav edit movenode A/B");
+					
+					if (node == null) player.sendMessage("[Navigator] Error: Node "+args[2]+" not selected.");
+					
+					node.setCoordinates(player.getLocation().getBlockX(),
+										player.getLocation().getBlockY(),
+										player.getLocation().getBlockZ());
+					
+					player.sendMessage("[Navigator] Node "+args[2]+" moved to (x:"+node.x+" y:"+node.y+" z: "+node.z+").");
 				}
 				// Create a map between the selected roads.
 				if (args[1].equalsIgnoreCase("addroad")){

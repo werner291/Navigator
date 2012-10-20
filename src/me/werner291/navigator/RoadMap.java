@@ -18,6 +18,8 @@ import org.bukkit.entity.Player;
 
 public class RoadMap {
 
+	boolean oldCompatibilityMode;
+	
 	File file = new File("world.map");
 	World world;
 	ArrayList<MapNode> nodes;
@@ -81,6 +83,7 @@ public class RoadMap {
 			// Split up input string
 			String Words[] = str.split(" ");
 			if (Words[0].equals("SAVEFORMAT")) {
+				oldCompatibilityMode = false;
 				fileVersion = Integer.parseInt(Words[1]);
 			}
 
@@ -167,10 +170,7 @@ public class RoadMap {
 				System.out.println("Found a node conneced to itself!");
 			} else {
 
-				int dist2 = (int) VecMath2D.distanceToSegment(
-						x, y, z,
-						current.node1.x, current.node1.y, current.node1.z,
-						current.node2.x, current.node2.y, current.node2.z);
+				int dist2 = (int) current.distanceFromPoint(x, y, z);
 
 				if (dist2 < dist) {
 					dist = dist2;
