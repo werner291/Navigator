@@ -9,28 +9,30 @@ public class RoutePlanner {
 	PlannerNode start;
 	ArrayList<PlannerNode> openNodes;
 	ArrayList<MapNode> closedNodes;
-	MapNode destNode1;
-	MapNode destNode2;
+	MapNode destNode1,destNode2;
 	ArrayList<MapNode> rawRoute;
-	int destX; int destZ;
+	int destX,destY,destZ;
 	MapRoad destRoad;
 	ArrayList<Instruction> route;
 	
-	RoutePlanner(RoadMap roadMap, int startX, int startZ, int destX, int destZ){
+	RoutePlanner(RoadMap roadMap, int startX, int startY, int startZ, int destX, int destY, int destZ){
 		// Locate the starting point on the map
-		MapRoad startRoad = roadMap.getNearestRoad(startX, startZ);
+		MapRoad startRoad = roadMap.getNearestRoad(startX, startY, startZ);
 		MapNode node1 = startRoad.node1; MapNode node2 = startRoad.node2;
-		Point2D startRoadPoint = startRoad.getClosestPoint(startX, startZ);
+		
+		double[] startRoadPoint = startRoad.getClosestPoint(startX, startY, startZ);
 		
 		// Make a "Ghost node" to start from.
-		MapNode startNode = new MapNode((int)startRoadPoint.getX(), (int)startRoadPoint.getY(), 0);
+		MapNode startNode = new MapNode((int)startRoadPoint[0],(int)startRoadPoint[1],(int)startRoadPoint[2], 0);
 		startNode.roads.add(new Object[]{null,node1});
 		startNode.roads.add(new Object[]{null,node2});
 		
 		//Find the road that is nearest to the destination
-		destRoad = roadMap.getNearestRoad(destX, destZ);
-		Point2D endRoadPoint = destRoad.getClosestPoint(destX, destZ);
-		this.destX = (int) endRoadPoint.getX(); this.destZ = (int) endRoadPoint.getY();
+		destRoad = roadMap.getNearestRoad(destX, destY, destZ);
+		double[] endRoadPoint = destRoad.getClosestPoint(destX, destY, destZ);
+		this.destX = (int)endRoadPoint[0];
+		this.destY = (int) endRoadPoint[1];
+		this.destZ = (int) endRoadPoint[2];
 		destNode1 = destRoad.node1; destNode2 = destRoad.node2;
 		
 		this.start = new PlannerNode(startNode, 0, Math.abs(this.destX-startX)+Math.abs(this.destZ-startZ), null);
@@ -101,7 +103,7 @@ public class RoutePlanner {
 		ArrayList<MapNode> route = new ArrayList<MapNode>();
 		
 		// Add the destination at the top of the list
-		route.add(new MapNode(destX, destZ, 0));
+		route.add(new MapNode(destX, destY, destZ, 0));
 		
 		// Follow up the path from the last node to the first to find the actual route
 		PlannerNode treatedNode = lastNode;

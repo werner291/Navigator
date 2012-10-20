@@ -142,7 +142,7 @@ public class Navigator extends JavaPlugin implements Listener{
 				Communicator.tellRouteCalc(player, destination.name);
 				
 				RoutePlanner rp = new RoutePlanner(maps.get(loc.getWorld()),
-						loc.getBlockX(), loc.getBlockZ(), destination.x, destination.z);
+						loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), destination.x, destination.y, destination.z);
 				
 				String rpResult = rp.findRoute();
 				
@@ -210,7 +210,7 @@ public class Navigator extends JavaPlugin implements Listener{
 				player.sendMessage("Route is being calculated to "+destX+" "+destZ+".");
 				
 				RoutePlanner rp = new RoutePlanner(maps.get(loc.getWorld()),
-						loc.getBlockX(), loc.getBlockZ(), destX, destZ);
+						loc.getBlockX(), loc.getBlockY() , loc.getBlockZ(), destX, 0, destZ);
 				
 				rp.findRoute();
 				
@@ -365,7 +365,7 @@ public class Navigator extends JavaPlugin implements Listener{
 					// Check if map is available.
 					if (rdmap == null) {Communicator.tellNoMap(player, player.getWorld().getName()); return true;}
 					
-					rdmap.AddNode(player.getLocation().getBlockX(),player.getLocation().getBlockZ());
+					rdmap.AddNode(player.getLocation().getBlockX(),player.getLocation().getBlockY(),player.getLocation().getBlockZ());
 					player.sendMessage("[Navigator] Added node at "+player.getLocation().getBlockX()+" "+player.getLocation().getBlockZ());
 					
 					if (editorSession.draw_map) editorSession.drawMap();
@@ -390,8 +390,9 @@ public class Navigator extends JavaPlugin implements Listener{
 					// Check if map is available.
 					if (rdmap == null) {Communicator.tellNoMap(player, player.getWorld().getName()); return true;}
 					editor_sessions.get(player).nodeA = rdmap.getNearestNode(player.getLocation().getBlockX(),
-																			player.getLocation().getBlockZ());
-					player.sendMessage("[Navigator] Node selected at x:" +editor_sessions.get(player).nodeA.x+" z:"+editor_sessions.get(player).nodeA.z);
+																			 player.getLocation().getBlockY(),
+																			 player.getLocation().getBlockZ());
+					player.sendMessage("[Navigator] Node A selected at x:" +editor_sessions.get(player).nodeA.x+" z:"+editor_sessions.get(player).nodeA.z);
 					if (editor_sessions.get(player).nodeA == editor_sessions.get(player).nodeB)
 						player.sendMessage("[Navigator] Warning: Selected the same node twice.");
 				}
@@ -413,7 +414,7 @@ public class Navigator extends JavaPlugin implements Listener{
 					if (rdmap == null) {Communicator.tellNoMap(player, player.getWorld().getName()); return true;}
 					if (editor_sessions.get(player).nodeB == null){player.sendMessage("[Navigator] No node selected in slot B."); return true;}
 					
-					player.sendMessage("[Navigator] Node deleted at x:" +editor_sessions.get(player).nodeB.x+" z:"+editor_sessions.get(player).nodeB.z);
+					player.sendMessage("[Navigator] Node B deleted at x:" +editor_sessions.get(player).nodeB.x+" z:"+editor_sessions.get(player).nodeB.z);
 					rdmap.removeNode(editor_sessions.get(player).nodeB);
 					if (editorSession.draw_map) editorSession.drawMap();
 				}
@@ -423,8 +424,9 @@ public class Navigator extends JavaPlugin implements Listener{
 					// Check if map is available.
 					if (rdmap == null) {Communicator.tellNoMap(player, player.getWorld().getName()); return true;}
 					editor_sessions.get(player).nodeB = rdmap.getNearestNode(player.getLocation().getBlockX(),
+																			player.getLocation().getBlockY(),
 																			player.getLocation().getBlockZ());
-					player.sendMessage("[Navigator] Node selected at x:" +editor_sessions.get(player).nodeB.x+" z:"+editor_sessions.get(player).nodeB.z);
+					player.sendMessage("[Navigator] Node B selected at x:" +editor_sessions.get(player).nodeB.x+" y:"+editor_sessions.get(player).nodeB.y+" z:"+editor_sessions.get(player).nodeB.z);
 					if (editor_sessions.get(player).nodeA == editor_sessions.get(player).nodeB)
 						player.sendMessage("[Navigator] Warning: Selected the same node twice.");
 				}
@@ -464,7 +466,11 @@ public class Navigator extends JavaPlugin implements Listener{
 					// Check if map is available.
 					if (rdmap == null) {Communicator.tellNoMap(player, player.getWorld().getName()); return true;}
 					
-					if (!rdmap.AddDest(player.getLocation().getBlockX(),player.getLocation().getBlockZ(),args[2])){
+					if (!rdmap.AddDest(
+							player.getLocation().getBlockX(),
+							player.getLocation().getBlockY(),
+							player.getLocation().getBlockZ(),
+							args[2])){
 						Communicator.tellDestionationExists(player,args[2]);
 					}
 					
