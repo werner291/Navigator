@@ -1,7 +1,9 @@
 package me.werner291.navigator.vecmath;
+
 /*
  * DistancePointSegmentExample, calculate distance to line
  * Copyright (C) 2008 Pieter Iserbyt <pieter.iserbyt@gmail.com>
+ * Modified by Werner Kroneman to support 3D.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +22,7 @@ package me.werner291.navigator.vecmath;
  * described by Paul Bourke on
  * See http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/.
  */
-import java.awt.geom.Point2D;
+
 
 public class VecMath2D {
 

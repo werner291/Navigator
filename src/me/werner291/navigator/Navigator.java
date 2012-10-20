@@ -133,7 +133,8 @@ public class Navigator extends JavaPlugin implements Listener{
 					return false;
 				}
 				// Check distance from closest road
-				if (maps.get(loc.getWorld()).getNearestRoad(loc.getBlockX(), loc.getBlockZ()).geoLine.ptLineDist(loc.getBlockX(), loc.getBlockZ())>10){
+				if (maps.get(loc.getWorld()).getNearestRoad(loc.getBlockX(), loc.getBlockY(),loc.getBlockZ())
+						.distanceFromPoint(loc.getBlockX(),loc.getBlockY(),loc.getBlockZ())>10){
 					Communicator.tellMessage(player,"TooFarFromRoad");
 					return true;
 				}
@@ -199,7 +200,7 @@ public class Navigator extends JavaPlugin implements Listener{
 					return true;
 				}
 				
-				double dist = rdmap.getNearestRoad(destX, destZ).geoLine.ptSegDist(destX, destZ);
+				double dist = rdmap.getNearestRoad(destX, 64, destZ).distanceFromPoint(destX, 64, destZ);
 				
 				// Check distance from closest road
 				if (dist>10){
@@ -367,7 +368,7 @@ public class Navigator extends JavaPlugin implements Listener{
 					rdmap.AddNode(player.getLocation().getBlockX(),player.getLocation().getBlockZ());
 					player.sendMessage("[Navigator] Added node at "+player.getLocation().getBlockX()+" "+player.getLocation().getBlockZ());
 					
-					if (editorSession.draw_map) editorSession.drawMap(editorSession.draw_map_height);
+					if (editorSession.draw_map) editorSession.drawMap();
 				}
 				// Save map.
 				if (args[1].equalsIgnoreCase("save")){
@@ -403,7 +404,7 @@ public class Navigator extends JavaPlugin implements Listener{
 					
 					player.sendMessage("[Navigator] Node deleted at x:" +editor_sessions.get(player).nodeA.x+" z:"+editor_sessions.get(player).nodeA.z);
 					rdmap.removeNode(editor_sessions.get(player).nodeA);
-					if (editorSession.draw_map) editorSession.drawMap(editorSession.draw_map_height);
+					if (editorSession.draw_map) editorSession.drawMap();
 				}
 				// Delete the MapNode in slot B
 				if (args[1].equalsIgnoreCase("delnodeb")){
@@ -414,7 +415,7 @@ public class Navigator extends JavaPlugin implements Listener{
 					
 					player.sendMessage("[Navigator] Node deleted at x:" +editor_sessions.get(player).nodeB.x+" z:"+editor_sessions.get(player).nodeB.z);
 					rdmap.removeNode(editor_sessions.get(player).nodeB);
-					if (editorSession.draw_map) editorSession.drawMap(editorSession.draw_map_height);
+					if (editorSession.draw_map) editorSession.drawMap();
 				}
 				// Select node B
 				if (args[1].equalsIgnoreCase("selnodeb")){
@@ -441,7 +442,7 @@ public class Navigator extends JavaPlugin implements Listener{
 					
 					player.sendMessage("[Navigator] Road created between (x:"+nodeA.x+",z:"+nodeA.z+") and (x:"+nodeB.x+",z:"+nodeB.z+").");
 					
-					if (editorSession.draw_map) editorSession.drawMap(editorSession.draw_map_height);
+					if (editorSession.draw_map) editorSession.drawMap();
 				}
 				// Delete the closest road if within 10 blocks from it.
 				if (args[1].equalsIgnoreCase("delroad")){
@@ -449,13 +450,13 @@ public class Navigator extends JavaPlugin implements Listener{
 					// Check if map is available.
 					if (rdmap == null) {Communicator.tellNoMap(player, player.getWorld().getName()); return true;}
 					
-					MapRoad road = rdmap.getNearestRoad(player.getLocation().getBlockX(), player.getLocation().getBlockZ());
-					if (road.geoLine.ptLineDist(player.getLocation().getBlockX(), player.getLocation().getBlockZ())<10){
-						player.sendMessage("[Navigator] Road deleted between (x:"+road.node1.x+",z:"+road.node1.z+") and (x:"+road.node2.x+",z:"+road.node2.z+").");
+					MapRoad road = rdmap.getNearestRoad(player.getLocation().getBlockX(),player.getLocation().getBlockY(), player.getLocation().getBlockZ());
+					if (road.distanceFromPoint(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ())<10){
+						player.sendMessage("[Navigator] Road deleted between (x:"+road.node1.x+",y:"+road.node1.y+",z:"+road.node1.z+") and (x:"+road.node2.x+",z:"+road.node2.z+").");
 						rdmap.removeRoad(road);
 					}
 					
-					if (editorSession.draw_map) editorSession.drawMap(editorSession.draw_map_height);
+					if (editorSession.draw_map) editorSession.drawMap();
 				}
 				// Add a destination.
 				if (args[1].equalsIgnoreCase("adddest") || args[1].equalsIgnoreCase("addest")){
@@ -469,7 +470,7 @@ public class Navigator extends JavaPlugin implements Listener{
 					
 					player.sendMessage("[Navigator] Destination created: "+args[2]);
 					
-					if (editorSession.draw_map) editorSession.drawMap(editorSession.draw_map_height);
+					if (editorSession.draw_map) editorSession.drawMap();
 				}
 				// Delete a destination.
 				if (args[1].equalsIgnoreCase("deldest")){
@@ -485,7 +486,7 @@ public class Navigator extends JavaPlugin implements Listener{
 					
 					player.sendMessage("[Navigator] Destination deleted: "+args[2]);
 					
-					if (editorSession.draw_map) editorSession.drawMap(editorSession.draw_map_height);
+					if (editorSession.draw_map) editorSession.drawMap();
 				}
 				if (args[1].equalsIgnoreCase("drawmap")){
 					RoadMap rdmap = maps.get(player.getWorld());
@@ -500,8 +501,8 @@ public class Navigator extends JavaPlugin implements Listener{
 						return true;
 					}
 					
-					player.sendMessage("[Navigator] Drawing map at y:"+args[2]+".");
-					editor_sessions.get(player).drawMap(Integer.parseInt(args[2]));
+					player.sendMessage("[Navigator] Drawing map.");
+					editor_sessions.get(player).drawMap();
 				}
 			} else {
 				Communicator.tellMessage(sender, "InGameOnlyCommand");

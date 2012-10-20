@@ -1,7 +1,5 @@
 package me.werner291.navigator;
 
-import java.awt.geom.Point2D;
-
 import me.werner291.navigator.vecmath.VecMath2D;
 
 public class MapRoad {
@@ -26,5 +24,9 @@ public class MapRoad {
 	 */
 	public double[] getClosestPoint(int x, int y, int z) {
 		return VecMath2D.getClosestPointOnSegment(node1.x,node1.y,node1.z, node2.x,node2.y,node2.z, x, y, z);
+	}
+
+	public double distanceFromPoint(int x, int y, int z) {
+		return VecMath2D.distanceToSegment(x1, y1, z1, x2, y2, z2, x, y, z);
 	}
 }

@@ -8,10 +8,12 @@ public class IdManager {
 	static ArrayList<Integer> ids = new ArrayList<Integer>();
 	static Random rand = new Random();
 	
-	//TODO handle conflicts.
+	
 	static void registerId(int id) throws IdConflictException{
+		if (ids.contains(id)) throw new IdConflictException();
 		ids.add(id);
 	}
+	
 	
 	public static int createId(){
 		
@@ -33,7 +35,7 @@ public class IdManager {
 	}
 	
 	@SuppressWarnings("serial")
-	public class IdConflictException extends Exception{
+	public static class IdConflictException extends Exception{
 		IdConflictException(){super();}
 	}
 
