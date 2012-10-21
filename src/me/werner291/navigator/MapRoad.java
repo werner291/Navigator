@@ -23,17 +23,25 @@ public class MapRoad {
 		x1 = node1.x; y1 = node1.y; z1 = node1.z;
 		x2 = node2.x; y2 = node2.y; z2 = node2.z;
 		
-		System.out.println("Searching closest point!");
+		// Square distance between the nodes of the road
+		double l2 = (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)+(z2-z1)*(z2-z1);
 		
-		double[] uVec = new double[]{x2-x1,y2-y1,z2-z1};
-    	double[] vVec = new double[]{px-x1,py-y1,pz-z1};
-    	
-    	double uLen = Math.sqrt(uVec[0]*uVec[0]+uVec[1]*uVec[1]+uVec[2]*uVec[2]);
-    	uVec = new double[]{uVec[0]/uLen,uVec[1]/uLen,uVec[1]/uLen};
-    	
-    	double udotv = uVec[0]*vVec[0]+uVec[1]*vVec[1]+uVec[2]*vVec[2];
-    	
-    	return new double[]{x1+uVec[0]*udotv,y1+uVec[1]*udotv,z1+uVec[2]*udotv};
+		// If the road is 0 in length return the distance between the point and the first node
+		if (l2 == 0.0) return new double[]{x1,y1,z1};
+		// Consider the line extending the segment, parameterized as v + t (w - v).
+		// We find projection of point p onto the line. 
+		// It falls where t = [(p-v) . (w-v)] / |w-v|^2
+		double t = ((px-x1)*(x2-x1)
+				   +(py-y1)*(y2-y1)
+				   +(pz-z1)*(z2-z1)
+				   )/l2;
+		
+		if (t < 0.0) return new double[]{x1,y1,z1};// Beyond the 'v' end of the segment
+		else if (t > 1.0) return new double[]{x2,y2,z2}; // Beyond the 'w' end of the segment
+		double resultX = x1+ t * (x2-x1);  // Projection falls on the segment
+		double resultY = y1+ t * (y2-y1);
+		double resultZ = z1+ t * (z2-z1);
+		return new double[]{resultX,resultY,resultZ};
 	}
 
 	public double distanceFromPoint(int px, int py, int pz) {

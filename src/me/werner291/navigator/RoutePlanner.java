@@ -29,7 +29,7 @@ public class RoutePlanner {
 		//Find the road that is nearest to the destination
 		destRoad = roadMap.getNearestRoad(destX, destY, destZ);
 		double[] endRoadPoint = destRoad.getClosestPoint(destX, destY, destZ);
-		this.destX = (int)endRoadPoint[0];
+		this.destX = (int) endRoadPoint[0];
 		this.destY = (int) endRoadPoint[1];
 		this.destZ = (int) endRoadPoint[2];
 		destNode1 = destRoad.node1; destNode2 = destRoad.node2;
@@ -133,7 +133,8 @@ public class RoutePlanner {
 			if (i==0){
 				MapNode next = rawRoute.get(i+1);
 				int dir = (int) Math.toDegrees(Math.atan2(-(next.z-node.z), next.x-node.x));
-				route.add(new Instruction(node.x,node.y, node.z, 4, Instruction.InstructionType.START,RoutePlanner.toCardinal(dir, 90, false)));
+				route.add(new Instruction(node.x,node.y, node.z, 4, Instruction.InstructionType.START,
+						RoutePlanner.toCardinal(dir, 90, false)));
 			} else if (i==rawRoute.size()-1){
 				route.add(new Instruction(node.x,node.y, node.z, 4, Instruction.InstructionType.END,Cardinal.NULL));
 			} else {
@@ -147,11 +148,15 @@ public class RoutePlanner {
 				if (relDir < 180) relDir += 360;
 				if (relDir > 180) relDir -= 360;
 				
-				if (relDir < 30 && relDir > -30) route.add(new Instruction(node.x, node.y, node.z, 5, Instruction.InstructionType.GO_STRAIGHT, RoutePlanner.toCardinal(dir, 90, false)));
-				if (relDir < 150 && relDir > 30) route.add(new Instruction(node.x, node.y, node.z, 5, Instruction.InstructionType.TURN_LEFT,RoutePlanner.toCardinal(dir, 90, false)));
-				if (relDir < -30 && relDir > -150) route.add(new Instruction(node.x, node.y, node.z, 5, Instruction.InstructionType.TURN_RIGHT,RoutePlanner.toCardinal(dir, 90, false)));
-				if ((relDir > 150 && relDir <= 180)||(relDir < -150 && relDir >= -180)) route.add(new Instruction(node.x, node.y, node.z, 5,
-						Instruction.InstructionType.TURN_AROUND,RoutePlanner.toCardinal(dir, 90, false)));
+				if (relDir < 30 && relDir > -30) route.add(new Instruction(node.x, node.y, node.z, 5,
+						Instruction.InstructionType.GO_STRAIGHT, RoutePlanner.toCardinal(dir, 90, false)));
+				if (relDir < 150 && relDir > 30) route.add(new Instruction(node.x, node.y, node.z, 5,
+						Instruction.InstructionType.TURN_LEFT,RoutePlanner.toCardinal(dir, 90, false)));
+				if (relDir < -30 && relDir > -150) route.add(new Instruction(node.x, node.y, node.z, 5,
+						Instruction.InstructionType.TURN_RIGHT,RoutePlanner.toCardinal(dir, 90, false)));
+				if ((relDir > 150 && relDir <= 180)||(relDir < -150 && relDir >= -180)) 
+					route.add(new Instruction(node.x, node.y, node.z, 5, Instruction.InstructionType.TURN_AROUND,
+							RoutePlanner.toCardinal(dir, 90, false)));
 			}
 		}
 		return route;

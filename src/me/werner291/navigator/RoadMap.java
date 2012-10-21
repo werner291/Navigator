@@ -16,8 +16,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class RoadMap {
-
-	boolean oldCompatibilityMode;
 	
 	File file = new File("world.map");
 	World world;
@@ -82,21 +80,24 @@ public class RoadMap {
 			// Split up input string
 			String Words[] = str.split(" ");
 			if (Words[0].equals("SAVEFORMAT")) {
-				oldCompatibilityMode = false;
 				fileVersion = Integer.parseInt(Words[1]);
+				
 			}
 
 			else if (Words[0].equals("Node")) {
 				MapNode newNode;
-				if (fileVersion == 1) // Old format support
-					newNode = new MapNode(Integer.parseInt(Words[2]),80,
-						Integer.parseInt(Words[3]), Integer.parseInt(Words[1]));
-				else
+				if (fileVersion == 1){ // Old format support
+					int x = Integer.parseInt(Words[2]);
+					int z = Integer.parseInt(Words[3]);
+					int y = world.getHighestBlockYAt(x, z);
+					newNode = new MapNode(x,y,z, Integer.parseInt(Words[1]));
+				}else{
 					newNode = new MapNode(
 							Integer.parseInt(Words[2]), //X
 							Integer.parseInt(Words[3]), //Y
 							Integer.parseInt(Words[4]), //Z
 							Integer.parseInt(Words[1]));//id
+				}
 				nodes.add(newNode);
 				nodeMap.put(newNode.id, newNode);
 				
@@ -117,16 +118,14 @@ public class RoadMap {
 			} else if (Words[0].equals("Dest")) {
 				MapDest newDest;
 				
-				if (fileVersion == 1) // Old format support
-				 newDest= new MapDest(
-						 Integer.parseInt(Words[2]),//X
-						 80,//Y
-						 Integer.parseInt(Words[3]),//Z
-						 getNearestNode(Integer.parseInt(Words[2]), //X
-								 		80,//Y
-								 		Integer.parseInt(Words[3])),//Z
-						Words[1].toLowerCase());//Name
-				else // Old format support
+				if (fileVersion == 1){ // Old format support
+					int x = Integer.parseInt(Words[2]);
+					int z = Integer.parseInt(Words[3]);
+					int y = world.getHighestBlockYAt(x, z);
+					
+					newDest= new MapDest(x,y,z,getNearestNode(x,y,z),Words[1].toLowerCase());//Name
+				}
+				else
 					 newDest= new MapDest(
 							 Integer.parseInt(Words[2]),//X
 							 Integer.parseInt(Words[3]),//Y
@@ -140,6 +139,11 @@ public class RoadMap {
 		}
 
 		in.close();
+		
+		if (fileVersion == 1){
+			System.out.println("[Navigator] Converted map to new format!");
+			save(file);
+		}
 	}
 
 	public MapNode getNearestNode(int x, int y, int z) {

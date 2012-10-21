@@ -43,7 +43,7 @@ public class Navigator extends JavaPlugin implements Listener{
 
 	@Override
 	public void onEnable() {
-		log.info("Navigator V1.6 DEV enabled!");
+		log.info("Navigator V1.6 Beta enabled!");
 		getConfig();
 		log.info("[Navigator] Configuration loaded.");
 		
@@ -134,25 +134,16 @@ public class Navigator extends JavaPlugin implements Listener{
 				}
 				
 				double distanceFromRoad;
-				if (!maps.get(loc.getWorld()).oldCompatibilityMode){
-					sender.sendMessage("[Nav Debug] No compatibility");
-					MapRoad nearestRoad = maps.get(loc.getWorld()).getNearestRoad(
+				
+				MapRoad nearestRoad = maps.get(loc.getWorld()).getNearestRoad(
 							loc.getBlockX(),
 							loc.getBlockY(),
 							loc.getBlockZ());
-					sender.sendMessage("[Nav Debug] "+nearestRoad.getWriteString());
 					
-					distanceFromRoad = nearestRoad.distanceFromPoint(
+				distanceFromRoad = nearestRoad.distanceFromPoint(
 								loc.getBlockX(),
 								loc.getBlockY(),
-								loc.getBlockZ());}
-				else{
-					sender.sendMessage("[Nav Debug] Yes compatibility");
-					distanceFromRoad = maps.get(loc.getWorld()).getNearestRoad(loc.getBlockX(), 80,loc.getBlockZ())
-						.distanceFromPoint(loc.getBlockX(),80,loc.getBlockZ());
-					}
-				
-				sender.sendMessage("[Nav Debug] Distance: "+distanceFromRoad);
+								loc.getBlockZ());
 				
 				// Check distance from closest road
 				if (distanceFromRoad>10){

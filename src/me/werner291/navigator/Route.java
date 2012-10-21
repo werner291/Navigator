@@ -31,6 +31,7 @@ public class Route{
 				
 				int drift = (int) routeLine.ptSegDist(owner.getLocation().getBlockX(), owner.getLocation().getBlockZ());
 				
+				
 				if (drift > 25){
 					Communicator.sendOffRouteWarningB(owner);
 					finished = true;
