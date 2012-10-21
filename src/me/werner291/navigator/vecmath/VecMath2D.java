@@ -40,45 +40,79 @@ public class VecMath2D {
      *                defined by p1,p2
      * @return The distance of p3 to the segment defined by p1,p2
      */
-    public static double distanceToSegment(double x1, double y1, double z1,
-    		double x2, double y2, double z2, double x3, double y3, double z3) {
-		double[] closestPoint = getClosestPointOnSegment(x1,y1,z1,x2,y2,z2,x3,y3,z3);
-		
-		System.out.println("[Nav Debug] Reference point: " + x3+"|"+y3+"|"+z3 );
-		System.out.println("[Nav Debug] Closest point: " + Arrays.toString(closestPoint));
-		
-		double deltaX = x3 - closestPoint[0];
-		double deltaY = y3 - closestPoint[1];
-		double deltaZ = z3 - closestPoint[2];
-		
-		return Math.sqrt(deltaX*deltaX + deltaY*deltaY + deltaZ*deltaZ);
+	//TODO check if works correctly
+	@Deprecated
+    public static double distanceToSegmentSquared(
+    		double x1, double y1, double z1,
+            double x2, double y2, double z2,
+            double px, double py, double pz) {
+    	System.out.println(Arrays.toString(new double[]{x1,y1,z1,x2,y2,z2,px,py,pz}));
+    	
+            // Adjust vectors relative to x1,y1
+            // x2,y2 becomes relative vector from x1,y1 to end of segment
+            x2 -= x1;
+            y2 -= y1;
+            z2 -= z1;
+            // px,py becomes relative vector from x1,y1 to test point
+            px -= x1;
+            py -= y1;
+            pz -= z1;
+            double dotprod = px * x2 + py * y2 + pz * z2;
+            double projlenSq;
+            if (dotprod <= 0.0) {
+                // px,py is on the side of x1,y1 away from x2,y2
+                // distance to segment is length of px,py vector
+                // "length of its (clipped) projection" is now 0.0
+                projlenSq = 0.0;
+            } else {
+                // switch to backwards vectors relative to x2,y2
+                // x2,y2 are already the negative of x1,y1=>x2,y2
+                // to get px,py to be the negative of px,py=>x2,y2
+                // the dot product of two negated vectors is the same
+                // as the dot product of the two normal vectors
+                px = x2 - px;
+                py = y2 - py;
+                py = z2 - pz;
+                dotprod = px * x2 + py * y2 + pz * z2;
+                if (dotprod <= 0.0) {
+                    // px,py is on the side of x2,y2 away from x1,y1
+                    // distance to segment is length of (backwards) px,py vector
+                    // "length of its (clipped) projection" is now 0.0
+                    projlenSq = 0.0;
+                } else {
+                    // px,py is between x1,y1 and x2,y2
+                    // dotprod is the length of the px,py vector
+                    // projected on the x2,y2=>x1,y1 vector times the
+                    // length of the x2,y2=>x1,y1 vector
+                    projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2 + z2 * z2);
+                }
+            }
+            // Distance to line is now the length of the relative point
+            // vector minus the length of its projection onto the line
+            // (which is zero if the projection falls outside the range
+            //  of the line segment).
+            double lenSq = px * px + py * py + pz * pz - projlenSq;
+            if (lenSq < 0) {
+                lenSq = 0;
+            }
+            return Math.sqrt(lenSq);
+        
     }
     
     // TODO check if results are correct
+    @Deprecated
     public static double[] getClosestPointOnSegment(double x1, double y1, double z1,
-    		double x2, double y2, double z2, double x3, double y3, double z3) {
+    		double x2, double y2, double z2, double px, double py, double pz) {
 
-    	final double xDelta = x2-x1;
-    	final double yDelta = y2-y1;
-    	final double zDelta = z2-z1;
-
-    	if ((xDelta == 0) && (yDelta == 0) && (zDelta == 0)) {
-    	    return new double[]{x1,y1,z1};
-    	}
-
-    	final double u = ( (x1-x3)*xDelta + (y1-y3)*yDelta + (z1-z3)*zDelta )
-    						/ (xDelta * xDelta + yDelta * yDelta + zDelta * zDelta);
-
-    	final double[] closestPoint;
-    	if (u < 0) {
-    	    closestPoint = new double[]{x1,y1,z1};
-    	} else if (u > 1) {
-    	    closestPoint = new double[]{x2,y2,z2};
-    	} else {
-    	    closestPoint = new double[]{x1 + u*xDelta, y1 + u * yDelta, z1 + u * zDelta};
-    	}
-
-    	return closestPoint;
+    	double[] uVec = new double[]{x2-x1,y2-y1,z2-z1};
+    	double[] vVec = new double[]{px-x1,py-y1,pz-z1};
+    	
+    	double uLen = Math.sqrt(uVec[0]*uVec[0]+uVec[1]*uVec[1]+uVec[2]*uVec[2]);
+    	uVec = new double[]{uVec[0]/uLen,uVec[1]/uLen,uVec[1]/uLen};
+    	
+    	double udotv = uVec[0]*vVec[0]+uVec[1]*vVec[1]+uVec[2]*vVec[2];
+    	
+    	return new double[]{x1+uVec[0]*udotv,y1+uVec[1]*udotv,z1+uVec[2]*udotv};
     }
 
 }

@@ -134,12 +134,23 @@ public class Navigator extends JavaPlugin implements Listener{
 				}
 				
 				double distanceFromRoad;
-				if (!maps.get(loc.getWorld()).oldCompatibilityMode)
-					distanceFromRoad = maps.get(loc.getWorld()).getNearestRoad(loc.getBlockX(), loc.getBlockY(),loc.getBlockZ())
-						.distanceFromPoint(loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
-				else
+				if (!maps.get(loc.getWorld()).oldCompatibilityMode){
+					sender.sendMessage("[Nav Debug] No compatibility");
+					MapRoad nearestRoad = maps.get(loc.getWorld()).getNearestRoad(
+							loc.getBlockX(),
+							loc.getBlockY(),
+							loc.getBlockZ());
+					sender.sendMessage("[Nav Debug] "+nearestRoad.getWriteString());
+					
+					distanceFromRoad = nearestRoad.distanceFromPoint(
+								loc.getBlockX(),
+								loc.getBlockY(),
+								loc.getBlockZ());}
+				else{
+					sender.sendMessage("[Nav Debug] Yes compatibility");
 					distanceFromRoad = maps.get(loc.getWorld()).getNearestRoad(loc.getBlockX(), 80,loc.getBlockZ())
 						.distanceFromPoint(loc.getBlockX(),80,loc.getBlockZ());
+					}
 				
 				sender.sendMessage("[Nav Debug] Distance: "+distanceFromRoad);
 				
@@ -458,6 +469,8 @@ public class Navigator extends JavaPlugin implements Listener{
 					node.setCoordinates(player.getLocation().getBlockX(),
 										player.getLocation().getBlockY(),
 										player.getLocation().getBlockZ());
+					
+					if (editorSession.draw_map) editorSession.drawMap();
 					
 					player.sendMessage("[Navigator] Node "+args[2]+" moved to (x:"+node.x+" y:"+node.y+" z: "+node.z+").");
 				}

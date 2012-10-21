@@ -28,7 +28,6 @@ public class EditorSession {
 	List<int[]> drawn_pixels;
 	public MapRoad selRoad;
 	
-	
 	public void drawMap() {
 		eraseDrawnMap();
 		draw_map = true;

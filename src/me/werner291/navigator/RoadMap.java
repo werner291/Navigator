@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.werner291.navigator.IdManager.IdConflictException;
-import me.werner291.navigator.vecmath.VecMath2D;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -167,7 +166,7 @@ public class RoadMap {
 			MapRoad current = roads.get(i);
 
 			if (current.node1 == current.node2) {
-				System.out.println("Found a node conneced to itself!");
+				System.out.println("Found a node connected to itself!");
 			} else {
 
 				int dist2 = (int) current.distanceFromPoint(x, y, z);
