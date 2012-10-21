@@ -376,6 +376,7 @@ public class Navigator extends JavaPlugin implements Listener {
 					sender.sendMessage("[Navigator] /nav edit addnode A/B");
 					sender.sendMessage("[Navigator] /nav edit selnode A/B");
 					sender.sendMessage("[Navigator] /nav edit delnode A/B");
+					sender.sendMessage("[Navigator] /nav edit movenode A/B");
 					sender.sendMessage("[Navigator] /nav edit addroad (select nodes first!)");
 					sender.sendMessage("[Navigator] /nav edit delroad (nearest road)");
 					sender.sendMessage("[Navigator] /nav edit addDest <unique name>");
@@ -426,10 +427,14 @@ public class Navigator extends JavaPlugin implements Listener {
 						editorSession.drawMap();
 
 					if (args.length >= 3) {
-						if (args[2].equalsIgnoreCase("A"))
+						if (args[2].equalsIgnoreCase("A")){
 							editor_sessions.get(player).nodeA = node;
-						else if (args[2].equalsIgnoreCase("B"))
+							player.sendMessage("[Navigator] Selected node in slot A.");
+							}
+						else if (args[2].equalsIgnoreCase("B")){
 							editor_sessions.get(player).nodeB = node;
+							player.sendMessage("[Navigator] Selected node in slot B.");
+						}
 					}
 				}
 				// Save map.

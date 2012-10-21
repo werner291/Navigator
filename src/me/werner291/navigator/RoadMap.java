@@ -332,7 +332,6 @@ public class RoadMap {
 			int dist2 = Math.abs(x - x2) + Math.abs(z - z2);
 			if (dist2 <= dist)
 				results.add(current);
-			System.out.println("searching node: " + dist2 + "<" + dist);
 		}
 
 		return results;
@@ -348,7 +347,6 @@ public class RoadMap {
 			int dist2 = Math.abs(x - x2) + Math.abs(z - z2);
 			if (dist2 <= dist)
 				results.add(current);
-			System.out.println("searching node: " + dist2 + "<" + dist);
 		}
 
 		return results;
@@ -362,7 +360,6 @@ public class RoadMap {
 			int dist2 = (int) current.distanceFromPoint(x, y, z);
 			if (dist2 <= dist)
 				results.add(current);
-			System.out.println("searching node: " + dist2 + "<" + dist);
 		}
 
 		return results;
