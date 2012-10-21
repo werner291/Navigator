@@ -301,8 +301,10 @@ public class RoadMap {
 		out.close();
 	}
 
-	public void AddNode(int x, int y, int z) {
-		nodes.add(new MapNode(x, y, z, IdManager.createId()));
+	public MapNode AddNode(int x, int y, int z) {
+		MapNode node = new MapNode(x, y, z, IdManager.createId());
+		nodes.add(node);
+		return node;
 	}
 
 	public void AddRoad(MapNode nodeA, MapNode nodeB) {
